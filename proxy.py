@@ -13,8 +13,8 @@ import traceback
 
 
 _connect = {
-    'user': 'bxhrainbow',
-    'passwd': 'lazy654321',
+    'user': 'rainbow',
+    'passwd': '654321',
     'host': 'dogt4.usessh001.com',
     'local_port': '7070',
 }
@@ -146,7 +146,10 @@ class SshClient:
 
         pid = os.fork()
         if pid == 0:
-            child = pexpect.spawn('''ssh -qTfnN %s@%s -D 127.0.0.1:%s''' % (self.user, self.host, self.local_port))
+            child = pexpect.spawn(
+                '''ssh -qTfnN %s@%s -D 127.0.0.1:%s''' % (self.user, self.host, self.local_port)
+            )
+
             try:
                 exp = child.expect(['password:','continue connecting (yes/no)?'])
                 if exp == 0:
@@ -175,17 +178,18 @@ class SshClient:
 
     def main_process(self):
         while(self.RUN):
-            time.sleep(5)
+
             if self.check_network():
                 time.sleep(2)
+
                 if self.check_network(proxy = True):
                     print self.get_pid('ssh')
                     s = self.WATCH(self.status != '00')
                     print '00',s
                     self.set_status('00')
-                    time.sleep(s)
                     self.rt.reset()
                     self.socket_error = 0
+                    time.sleep(s)
                     continue
                 else:
                     if not self.check_process('ssh'):
@@ -206,8 +210,8 @@ class SshClient:
             else:
                 s = self.WATCH(self.status != '11')
                 print '11',s
-                time.sleep(s)
                 self.set_status('11')
+                time.sleep(s)
                 continue
 
 
