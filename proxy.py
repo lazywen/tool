@@ -1,4 +1,4 @@
-#!/home/qfpay/python/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Fri Nov  2 17:17:53 CST 2012
 
@@ -15,7 +15,7 @@ import traceback
 _connect = {
     'user': 'rainbow',
     'passwd': '654321',
-    'host': 'dogt4.usessh001.com',
+    'host': 'www.ssh.com',
     'local_port': '7070',
 }
 
@@ -42,7 +42,7 @@ class WatchDog:
         if self.watch_now >= self.end:
             return self.end
         else:
-            self.watch_now += 5
+            self.watch_now += 10
             return self.watch_now
 
 
@@ -195,7 +195,7 @@ class SshClient:
                     if not self.check_process('ssh'):
                         self.start_process()
                     else:
-                        if self.socket_error >= 7:
+                        if self.socket_error >= 5:
                             self.start_process(True)
                             self.socket_error = 0
                             self.set_status('22')
