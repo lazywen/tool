@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/home/qfpay/python/bin/python
 # -*- coding: utf-8 -*-
 # Fri Nov  2 17:17:53 CST 2012
 
@@ -8,14 +8,16 @@ import sys
 import time
 import pycurl
 import pexpect
+import logging
 import StringIO
 import traceback
 
+_log = '/tmp/proxy.log'
 
 _connect = {
-    'user': 'rainbow',
-    'passwd': '654321',
-    'host': 'www.ssh.com',
+    'user': 'username',
+    'passwd': 'passwd',
+    'host': '111.111.111.111',
     'local_port': '7070',
 }
 
@@ -27,11 +29,26 @@ _status = {
 }
 
 
+def loginit():
+    logger  = logging.getLogger()
+    if _log == 'stdout':
+        handler = logging.StreamHandler()
+    else:
+        handler = logging.FileHandler(_log)
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    logger.setLevel(logging.NOTSET)
+    return logger
+
+log = loginit()
+
 
 class WatchDog:
     def __init__(self):
-        self.begin = 10
-        self.end = 300
+        self.begin = 0
+        self.end = 600
         self.watch_now = 10
 
 
@@ -42,7 +59,7 @@ class WatchDog:
         if self.watch_now >= self.end:
             return self.end
         else:
-            self.watch_now += 10
+            self.watch_now += 15
             return self.watch_now
 
 
@@ -61,7 +78,7 @@ class ConnRetry:
         self.retry += 1
 
         if self.retry >= self.MAX_RETRY:
-            print 'ssh connect fialed'
+            log.error('ssh connect fialed')
             sys.exit(-2)
 
 
@@ -110,7 +127,7 @@ class SshClient:
             else:
                 return False
         except:
-            traceback.print_exc()
+            log.warn(traceback.format_exc())
             return False
 
 
@@ -161,7 +178,7 @@ class SshClient:
                 time.sleep(10)
             except:
                 child.close()
-                print "can not connecting to server %s" % self.host
+                log.warn("can not connecting to server %s" % self.host)
             os._exit(0)
         return
 
@@ -183,9 +200,8 @@ class SshClient:
                 time.sleep(2)
 
                 if self.check_network(proxy = True):
-                    print self.get_pid('ssh')
                     s = self.WATCH(self.status != '00')
-                    print '00',s
+                    log.info('status:00 pid:%s next:%s' % (self.get_pid('ssh'),s))
                     self.set_status('00')
                     self.rt.reset()
                     self.socket_error = 0
@@ -195,7 +211,7 @@ class SshClient:
                     if not self.check_process('ssh'):
                         self.start_process()
                     else:
-                        if self.socket_error >= 5:
+                        if self.socket_error >= 4:
                             self.start_process(True)
                             self.socket_error = 0
                             self.set_status('22')
@@ -203,13 +219,12 @@ class SshClient:
                             self.socket_error += 1
 
                     s = self.WATCH(self.status != '01')
-                    print '01',s
-                    print 'socket',self.socket_error
+                    log.warn('status:01 socket_err:%s next:%s' % (self.socket_error,s))
                     self.set_status('01')
                     time.sleep(s)
             else:
                 s = self.WATCH(self.status != '11')
-                print '11',s
+                log.warn('status:11 next:%s' % s)
                 self.set_status('11')
                 time.sleep(s)
                 continue
