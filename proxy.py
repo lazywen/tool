@@ -13,11 +13,12 @@ import StringIO
 import traceback
 
 _log = '/tmp/proxy.log'
+_pid = '/tmp/proxy.pid'
 
 _connect = {
     'user': 'username',
-    'passwd': 'passwd',
-    'host': '111.111.111.111',
+    'passwd': '654321',
+    'host': '62.65.65.65',
     'local_port': '7070',
 }
 
@@ -147,6 +148,13 @@ class SshClient:
         return int(ret.split()[1])
 
 
+    def set_pid(self):
+        pid = self.get_pid('py')
+        f = open(_pid, 'w')
+        f.write(str(pid))
+        f.close()
+
+
     def check_process(self, what):
         ret = self.get_proc_sta(what)
 
@@ -195,6 +203,7 @@ class SshClient:
 
     def main_process(self):
         while(self.RUN):
+            self.set_pid()
 
             if self.check_network():
                 time.sleep(2)
