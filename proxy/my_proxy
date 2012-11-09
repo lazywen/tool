@@ -1,0 +1,48 @@
+#!/bin/sh 
+# chkconfig: - 84 09
+# description: a script to start/stop/restart proxy
+
+
+PID_FILE=/tmp/proxy.pid
+
+
+case "$1" in
+ 
+ start)
+     if [ -f $PID_FILE ]; then
+       if kill -0 `cat $PID_FILE`; then
+         echo "Error: proxy_daemon is already running, exiting."
+         exit 1
+       else
+         rm -f $PID_FILE
+       fi
+     fi
+	/usr/bin/python /home/lazy/proxy.py
+	
+     if [ $? -eq 0 ]; then
+       echo "Starting proxy, OK." 
+     else
+       echo "Starting proxy, Failed."
+       rm -f $PID_FILE
+     fi
+     ;;
+
+ restart)
+     $0 stop
+     $0 start
+     ;;
+
+ stop)
+     test ! -f $PID_FILE && echo "No $PID_FILE file found, exiting." && exit 1
+     kill `cat $PID_FILE` && rm -f $PID_FILE && \
+     echo "Stopping proxy, OK." || echo "Stopping proxy, failed."
+     ;;
+
+ *)
+     echo "Usage: $0 {start|stop|restart}"
+     exit 1
+     ;;
+
+esac
+
+exit 0
