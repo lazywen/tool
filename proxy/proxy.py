@@ -150,9 +150,8 @@ class SshClient:
 
     def set_pid(self):
         pid = self.get_pid('py')
-        f = open(_pid, 'w')
-        f.write(str(pid))
-        f.close()
+        with open(_pid, 'w') as f:
+            f.write(str(pid))
 
 
     def check_process(self, what):
