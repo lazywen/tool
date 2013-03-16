@@ -2,7 +2,6 @@
 # chkconfig: - 84 09
 # description: a script to start/stop/restart proxy
 
-
 PID_FILE=/tmp/proxy.pid
 
 
