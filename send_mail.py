@@ -11,8 +11,8 @@ mail_pass="password"
 
 def send_mail(to_list, sub, content):
     me = mail_user + "<" + mail_user + ">"
-    msg = MIMEText(content)
-    msg['Subject'] = sub 
+    msg = MIMEText(content.encode('utf-8'), "html", "utf-8")
+    msg['Subject'] = sub
     msg['From'] = me
     msg['To'] = ";".join(to_list)
     try:
