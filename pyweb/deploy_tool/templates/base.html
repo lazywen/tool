@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title></title>
+
+        <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+
+        <%block name="css"/>
+
+        <%block name="js"/>
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <div id="sidebar">
+                <ul>
+                    <li class="fir_menu">
+                        <a href="/">Welcome</a>
+                    </li>
+                    <li class="fir_menu">
+                        <a href="#">deploy app</a>
+                        <ul>
+                            <li class="sec_menu"><a href="/android_qfpay">Android qfpay</a></li>
+                            <li class="sec_menu"><a href="/ios_qfpay">IOS qfpay</a></li>
+                        </ul>
+                    </li>
+                    <li class="fir_menu">
+                        <a href="#">deploy manage</a>
+                        <ul>
+                            <li class="sec_menu"><a href="/rollback_list">Rollback</a></li>
+                        </ul>
+                    </li>
+                    <li class="fir_menu">
+                        <a href="#">settings</a>
+                        <ul>
+                            <li class="sec_menu"><a href="/conf_login">login</a></li>
+                            <li class="sec_menu"><a href="/conf_path">path</a></li>
+                        </ul>
+                    </li>
+                    <li class="logout"><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+
+            <div id="content">
+            ${self.body()}
+            <div id="footer">
+            </div>
+            </div>
+
+        </div>
+    </body>
+</html>

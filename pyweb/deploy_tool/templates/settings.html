@@ -1,0 +1,14 @@
+## coding: utf-8
+<%inherit file="base.html"/>
+
+
+<h3>settings for ${title}:</h3>
+
+<div class="content_form">
+
+<p><span class="form_note">核对一下，不提供修改，要修改联系管理员</span></p>
+
+%for k in settings:
+    <p>${k}:<br><input class="input input_long" readonly="readonly" value="${settings[k]}"></input></p>
+%endfor
+</div>

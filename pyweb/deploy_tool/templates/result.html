@@ -1,0 +1,18 @@
+## coding: utf-8
+<%inherit file="base.html"/>
+
+<div class="result_form">
+    %for msg in msg_list:
+        <p>${msg}</p>
+    %endfor
+
+    %if go_mis:
+    <p><br></p>
+    <p><br></p>
+    <p><br></p>
+    %for l in links:
+    <a href="${l}">${l}</a>
+    %endfor
+    <p>Congratulations to you, now you can click <a href="http://mis.qfpay.com/admin">here</a> to go to mis, bye~</p>
+    %endif
+</div>

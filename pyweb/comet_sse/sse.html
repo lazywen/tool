@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTTP Streaming Example</title>
+</head>
+<body>
+    <p>This example must be run on a server to work properly and will not work in IE.</p>
+    <div id="comet_test">
+    </div>
+    <script>
+    
+        function createStreamingClient(url){        
+
+            var source = new EventSource(url);
+
+            source.onmessage = function(event){
+                        var data = event.data;
+                        var c = document.getElementById("comet_test");
+                        c.innerHTML += '<br>' + data;
+                        //alert("Received: " + data);
+                     }
+
+            
+        }
+
+        var client = createStreamingClient("/sse")
+        
+    </script>
+</body>
+</html>

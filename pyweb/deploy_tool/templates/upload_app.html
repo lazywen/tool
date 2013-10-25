@@ -1,0 +1,23 @@
+## coding: utf-8
+<%inherit file="base.html"/>
+
+<h3>${title}</h3>
+
+<% 
+    msg_file=u"文件名中不能含有如()\][和空格等特殊字符" 
+    msg_md5=u"32位字符的md5码"
+    msg_ver=u"版本号，如 1.9.21"
+%>
+
+<div class="content_form">
+    <form action="/upload_file" enctype="multipart/form-data" method="post">
+        ${xsrf_form_html()}
+        <p><lable for="app_file">app:<br><input id="app_file" name="app_file" type="file"></lable><span class="form_note">${msg_file}</span></p>
+        <p><lable for="app_md5">app md5:<br><input id="app_md5" name="app_md5" type="text" class="input" maxlength="32"></lable><span class="form_note">${msg_md5}</span></p>
+        <p><lable for="app_ver">app ver:<br><input id="app_ver" name="app_ver" type="text" class="input" maxlength="20"></lable><span class="form_note">${msg_ver}</span></p>
+        <p><lable for="passwd">password for qfpay:<br><input id="passwd" name="passwd" type="password" class="input"></lable></p>
+        <p><lable for="app_type"><br><input id="app_type" name="app_type" type="hidden" value="${app_type}"></lable></p>
+        <p><input type="submit" value="upload"></p>
+    </form>
+    <p>${msg}</p>
+</div>

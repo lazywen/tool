@@ -1,0 +1,65 @@
+## coding: utf-8
+<%inherit file="base.html"/>
+
+<%!
+from utils import operation_code
+import re
+
+path_re = re.compile(".*home/www/app/(.+)")
+
+def get_operation(code):
+    return operation_code.get(code)
+
+def get_rollback(code, id):
+    if code == 1:
+        return u'''<a href="/rollback?roll_id=%s">点击回滚</a>''' % id
+    else:
+        return u'已回滚'
+
+def get_relative_path(path):
+    return re.match(path_re, path).group(1)
+
+def get_path_list(path_list):
+    paths = path_list.split()
+    ret = ''
+    for r in paths:
+        if r == '0' or r == 0:
+            ret += u'<p>无需备份</p>'
+        else:
+            ret += u'<p>%s</p>' % get_relative_path(r)
+    return ret
+%>
+
+<h3>deploy list:</h3>
+
+<div id="roll_table">
+    <table cellspacing="0">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">${u'用户'}</th>
+                <th scope="col">${u'操作'}</th>
+                <th scope="col">${u'版本'}</th>
+                <th scope="col">${u'路径'}</th>
+                <th scope="col">${u'备份'}</th>
+                <th scope="col">${u'时间'}</th>
+                <th scope="col">${u'回滚'}</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        %for dep in deploy_list:
+            <tr>
+                <td scope="col">${dep['id']}</td>
+                <td scope="col">${dep['user']}</td>
+                <td scope="col">${get_operation(dep['operation'])}</td>
+                <td scope="col">${dep['app_version']}</td>
+                <td scope="col">${get_path_list(dep['deploy_path'])}</td>
+                <td scope="col">${get_path_list(dep['backup_path'])}</td>
+                <td scope="col">${dep['stime']}</td>
+                <td scope="col">${get_rollback(dep['status'], dep['id'])}</td>
+            </tr>
+        %endfor
+        </tbody>
+    </table>
+</div>

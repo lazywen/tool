@@ -1,0 +1,35 @@
+## coding: utf-8
+<%inherit file="base.html"/>
+
+<%!
+from utils import operation_code
+
+def get_path(paths):
+    ret = ''
+    for p in paths:
+        if p != '0' and p != 0:
+            ret += "<br>%s%s" % ('&nbsp;'*7, p)
+    return ret
+
+def get_operation(code):
+    return operation_code.get(code)
+%>
+
+<h3>password for ${user}:</h3>
+
+<div id="passwd_form" class="content_form">
+    <p><span class="form_note">确认回滚，输入密码以继续，或后退:</span></p>
+    <p><span class="form_note">id： ${roll_data['id']}</span></p>
+    <p><span class="form_note">类型： ${get_operation(int(roll_data['operation']))}</span></p>
+    <p><span class="form_note">新版本： ${roll_data['app_version']}</span></p>
+    <p><span class="form_note">已备份： ${get_path(roll_data['backup_path'].split())}</span></p>
+    <p><span class="form_note">已部署： ${get_path(roll_data['deploy_path'].split())}</span></p>
+    <p><span class="form_note">时间： ${roll_data['stime']}</span></p>
+    <br>
+    <form action="${post_add}" method="post">
+        ${xsrf_form_html()}
+        <p><lable for="passwd">password:<br><input id="password" name="password" type="password" class="input" maxlength="20"></input></lable></p>
+        <p><lable><input id="roll_id" name="roll_id" type="hidden" value="${roll_id}"></input></lable></p>
+        <p><input type="submit" value="submit"></p>
+    </form>
+</div>
